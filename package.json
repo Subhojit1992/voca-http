@@ -1,0 +1,50 @@
+{
+  "name": "voca-http",
+  "version": "0.1.0",
+  "description": "Very light HTTP client based on Fetch API",
+  "scripts": {
+    "start": "npm run dev",
+    "dev": "parcel src/*.html",
+    "build": "parcel build src/*.html",
+    "clean": "rimraf dest",
+    "build:prod": "npm run clean && rollup -c"
+  },
+  "keywords": [
+    "fetch",
+    "rest",
+    "xhr",
+    "http",
+    "https",
+    "request",
+    "requests",
+    "fetching",
+    "ajax",
+    "get",
+    "url",
+    "api"
+  ],
+  "license": "MIT",
+  "repository": "Subhojit1992/voca-http",
+  "author": {
+    "name": "Subhojit Mondal",
+    "email": "subhojit1992.mondal@gmail.com",
+    "url": "https://github.com/Subhojit1992"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.10.4",
+    "@babel/preset-env": "^7.10.4",
+    "@rollup/plugin-babel": "^5.0.4",
+    "@rollup/plugin-node-resolve": "^8.1.0",
+    "eslint": "7.2.0",
+    "eslint-config-airbnb": "18.2.0",
+    "eslint-plugin-import": "^2.21.2",
+    "eslint-plugin-jsx-a11y": "^6.3.0",
+    "eslint-plugin-react": "^7.20.0",
+    "eslint-plugin-react-hooks": "4.0.0",
+    "parcel-bundler": "^1.12.4",
+    "prettier": "^2.0.5",
+    "rollup": "^2.18.2",
+    "rollup-plugin-uglify": "^6.0.4",
+    "sass": "^1.26.8"
+  }
+}
