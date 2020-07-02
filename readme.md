@@ -1,7 +1,7 @@
 <div align="center">
 	<br>
 	<div>
-		<img width="512" height="512" src="assets/images/voca-logo.png" alt="voca-http">
+		<img width="300" height="300" src="assets/images/voca-logo.png" alt="voca-http">
 	</div>
 	<br>
 </div>
