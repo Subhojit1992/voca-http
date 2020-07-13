@@ -1,5 +1,5 @@
 // import { voca } from '../lib/index';
-import { voca } from '../../dest/bundle.esm';
+import { voca } from '../../index.js';
 
 
 voca.get('https://jsonplaceholder.typicode.com/todos')

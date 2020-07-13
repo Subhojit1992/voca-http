@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Very light HTTP client based on Fetch API",
   "scripts": {
-    "start": "npm run dev",
+    "start": "npm run clean && npm run dev",
     "dev": "parcel src/*.html",
     "build": "parcel build src/*.html",
-    "clean": "rimraf dest",
-    "build:prod": "npm run clean && rollup -c"
+    "clean": "rimraf dist",
+    "build:release": "npm run clean && rollup -c"
   },
   "keywords": [
     "fetch",
@@ -31,7 +31,8 @@
     "url": "https://github.com/Subhojit1992"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.4",
+    "@babel/core": "^7.0.0-0",
+    "@babel/plugin-proposal-decorators": "^7.10.4",
     "@babel/preset-env": "^7.10.4",
     "@rollup/plugin-babel": "^5.0.4",
     "@rollup/plugin-node-resolve": "^8.1.0",

@@ -1,24 +1,26 @@
 import resolve from '@rollup/plugin-node-resolve';
 import babel from '@rollup/plugin-babel';
-// import { uglify } from "rollup-plugin-uglify";
+import { uglify } from "rollup-plugin-uglify";
 
-const dist = 'dest';
+const dist = 'dist';
 
 export default {
   input: 'src/lib/index.js',
   output: [
     {
-        file: `${dist}/bundle.cjs.js`,
-        format: 'cjs'
-    },
-    {
-        file: `${dist}/bundle.esm.js`,
+        file: `index.js`,
         format: 'esm'
     },
     {
         name: 'voca',
-        file: `${dist}/bundle.umd.js`,
+        file: `${dist}/voca-http.js`,
         format: 'umd'
+    },
+    {
+      name: 'voca',
+      file: `${dist}/voca-http.min.js`,
+      format: 'umd',
+      plugins: uglify()
     },
   ],
   plugins: [
