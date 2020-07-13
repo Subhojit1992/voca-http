@@ -58,7 +58,7 @@ API(
 
 ## Browser support
 
-The latest version of Chrome, Firefox, and Safari.
+The latest version of Chrome, Firefox, Edge and Safari.
 
 ## Maintainer
 - [Subhojit Mondal](https://github.com/Subhojit1992)
