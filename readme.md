@@ -1,6 +1,6 @@
-# voca-http
+# Voca HTTP
 
- <img src="./docs/public/images/voca-logo.png" alt="voca-http logo" width="130" height="130" />
+ <img src="https://raw.githubusercontent.com/Subhojit1992/voca-http/master/docs/public/images/voca-logo.png" alt="voca-http logo" width="130" height="130" />
 
 A lightweight and flexible HTTP client for browser and Node.js environments. Inspired by Axios, with support for interceptors, progress tracking, and TypeScript.
 
