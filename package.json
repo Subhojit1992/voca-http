@@ -1,6 +1,6 @@
 {
   "name": "voca-http",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A lightweight and flexible HTTP client for the browser and node.js",
   "main": "dist/voca-http.cjs.js",
   "module": "dist/voca-http.esm.js",
@@ -42,4 +42,4 @@
     "tslib": "^2.5.0",
     "typescript": "^5.0.0"
   }
-} 
+}
