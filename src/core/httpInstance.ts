@@ -22,6 +22,7 @@ export class HttpInstance {
   private vocaInstance: VocaInstance;
   private method: HttpMethod | null = null;
   private data: any;
+  private headers: HeadersInit;
 
   /**
    * Create an HTTP instance
@@ -30,21 +31,11 @@ export class HttpInstance {
    */
   constructor(args: any[], config: RequestConfig | any) {
     this.base = new HttpBase();
+    this.method = args[0] as HttpMethod;
     this.uri = args[1];
     this.data = args[2];
+    this.headers = args[3] || {};
     this.vocaInstance = this._vocaItem(config);
-    
-    if (args.includes('GET')) {
-      this.method = 'GET';
-    } else if (args.includes('POST')) {
-      this.method = 'POST';
-    } else if (args.includes('PATCH')) {
-      this.method = 'PATCH';
-    } else if (args.includes('PUT')) {
-      this.method = 'PUT';
-    } else if (args.includes('DELETE')) {
-      this.method = 'DELETE';
-    }
   }
   
   /**
@@ -56,11 +47,11 @@ export class HttpInstance {
       return Promise.reject(new Error('Invalid HTTP method'));
     }
     
-    if (this.method === 'GET') {
-      return this.vocaInstance(this.method, this.uri);
+    if (this.method === 'GET' || this.method === 'DELETE') {
+      return this.vocaInstance(this.method, this.uri, undefined, this.headers);
     }
     
-    return this.vocaInstance(this.method, this.uri, this.data);
+    return this.vocaInstance(this.method, this.uri, this.data, this.headers);
   }
 
   /**
@@ -86,18 +77,11 @@ export class HttpInstance {
         }
 
         return {
-          url: `${route}`,
+          url: route,
           body,
           method,
           headers,
         } as RequestOptions;
-      },
-      onResponse: (response: Response) => {
-        if (response.status === 403) throw new Error('Authorization error.');
-        return response.json();
-      },
-      onError: () => {
-        return Promise.reject();
       },
     });
   }

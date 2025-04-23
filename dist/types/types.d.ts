@@ -11,7 +11,7 @@ export type ResponseInterceptor = (response: Response) => Response | void;
 export interface VocaConfig {
     baseUrl?: string;
     onError?: (reason: any) => Promise<any>;
-    onRequest?: (...args: any[]) => RequestOptions;
+    onRequest?: (method: string, url: string, data?: any, headers?: HeadersInit) => RequestOptions;
     onRequestError?: (reason: any) => Promise<any>;
     onResponse?: (response: Response) => Promise<any>;
     onResponseError?: (error: Error) => Promise<any>;

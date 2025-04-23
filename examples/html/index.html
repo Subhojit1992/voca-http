@@ -7,15 +7,38 @@
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-      max-width: 800px;
+      max-width: 900px;
       margin: 0 auto;
       padding: 20px;
+    }
+    h1 {
+      color: #333;
+      border-bottom: 2px solid #4CAF50;
+      padding-bottom: 10px;
+    }
+    h2 {
+      color: #4CAF50;
+      margin-top: 30px;
+    }
+    .example-container {
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 15px;
     }
     pre {
       background-color: #f5f5f5;
       padding: 15px;
       border-radius: 4px;
       overflow: auto;
+      border-left: 4px solid #4CAF50;
     }
     button {
       background-color: #4CAF50;
@@ -26,15 +49,31 @@
       text-decoration: none;
       display: inline-block;
       font-size: 16px;
-      margin: 4px 2px;
       cursor: pointer;
       border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    button:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+    input[type="file"], input[type="text"] {
+      margin: 10px 0;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      width: 100%;
+      box-sizing: border-box;
     }
     .progress-container {
       width: 100%;
       background-color: #ddd;
       border-radius: 4px;
       margin: 10px 0;
+      overflow: hidden;
     }
     .progress-bar {
       height: 20px;
@@ -43,35 +82,116 @@
       width: 0%;
       transition: width 0.3s;
     }
+    .error {
+      color: #d32f2f;
+      background-color: #ffebee;
+      border-left: 4px solid #d32f2f;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+    .method-badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      color: white;
+      font-size: 12px;
+      font-weight: bold;
+      margin-right: 8px;
+    }
+    .get { background-color: #2196F3; }
+    .post { background-color: #4CAF50; }
+    .put { background-color: #FF9800; }
+    .patch { background-color: #9C27B0; }
+    .delete { background-color: #F44336; }
+    .file { background-color: #607D8B; }
   </style>
 </head>
 <body>
-  <h1>voca-http: Examples</h1>
+  <h1>voca-http: Complete API Examples</h1>
+  <p>This page demonstrates all the features of the voca-http library.</p>
   
-  <h2>Basic GET Request</h2>
-  <button id="fetch-posts">Fetch Posts</button>
-  <div id="posts-result">
-    <pre id="posts-data"></pre>
+  <!-- GET Example -->
+  <div class="example-container">
+    <h2><span class="method-badge get">GET</span>Request Examples</h2>
+    <div class="btn-group">
+      <button id="fetch-posts">Fetch Posts</button>
+      <button id="fetch-post">Fetch Single Post</button>
+      <button id="fetch-comments">Fetch Comments</button>
+    </div>
+    <div id="get-result">
+      <pre id="get-data">Click a button above to make a GET request</pre>
+    </div>
   </div>
   
-  <h2>POST Request</h2>
-  <button id="create-post">Create Post</button>
-  <div id="post-result">
-    <pre id="post-data"></pre>
+  <!-- POST Example -->
+  <div class="example-container">
+    <h2><span class="method-badge post">POST</span>Request Example</h2>
+    <button id="create-post">Create New Post</button>
+    <div id="post-result">
+      <pre id="post-data">Click the button to create a new post</pre>
+    </div>
   </div>
   
-  <h2>File Upload</h2>
-  <input type="file" id="file-input" />
-  <button id="upload-file">Upload File</button>
-  <div class="progress-container">
-    <div id="upload-progress" class="progress-bar"></div>
+  <!-- PUT Example -->
+  <div class="example-container">
+    <h2><span class="method-badge put">PUT</span>Request Example</h2>
+    <button id="update-post-put">Update Post (Replace)</button>
+    <div id="put-result">
+      <pre id="put-data">Click the button to update a post with PUT</pre>
+    </div>
   </div>
-  <pre id="upload-result"></pre>
+  
+  <!-- PATCH Example -->
+  <div class="example-container">
+    <h2><span class="method-badge patch">PATCH</span>Request Example</h2>
+    <button id="update-post-patch">Update Post (Partial)</button>
+    <div id="patch-result">
+      <pre id="patch-data">Click the button to update a post with PATCH</pre>
+    </div>
+  </div>
+  
+  <!-- DELETE Example -->
+  <div class="example-container">
+    <h2><span class="method-badge delete">DELETE</span>Request Example</h2>
+    <button id="delete-post">Delete Post</button>
+    <div id="delete-result">
+      <pre id="delete-data">Click the button to delete a post</pre>
+    </div>
+  </div>
+  
+  <!-- File Upload Example -->
+  <div class="example-container">
+    <h2><span class="method-badge file">FILE</span>Upload Example</h2>
+    <input type="file" id="file-input" />
+    <button id="upload-file">Upload File</button>
+    <div class="progress-container">
+      <div id="upload-progress" class="progress-bar"></div>
+    </div>
+    <pre id="upload-result">Select a file and click upload</pre>
+  </div>
+  
+  <!-- File Download Example -->
+  <div class="example-container">
+    <h2><span class="method-badge file">FILE</span>Download Example</h2>
+    <input type="text" id="download-url" placeholder="Enter URL to download (e.g., https://picsum.photos/200)" 
+           value="https://picsum.photos/200" />
+    <button id="download-file">Download File</button>
+    <div class="progress-container">
+      <div id="download-progress" class="progress-bar"></div>
+    </div>
+    <div id="download-result">
+      <p>Download will appear here</p>
+    </div>
+  </div>
 
   <script src="../../dist/voca-http.umd.min.js"></script>
   <script>
     // Configure voca with a base URL
+    console.log('Initializing voca-http...');
     const voca = window.vocaHttp.voca;
+    
     const api = voca.create(fetch, {
       baseUrl: 'https://jsonplaceholder.typicode.com',
       timeout: 10000, // 10s timeout
@@ -88,19 +208,52 @@
       }
     });
 
-    // GET example
+    console.log('API instance created:', api);
+
+    // Helper for error handling
+    function handleError(elementId, error) {
+      console.error(`Error: ${error.message}`, error);
+      document.getElementById(elementId).innerHTML = `<div class="error">Error: ${error.message || 'Unknown error'}</div>`;
+    }
+
+    // GET Examples
     document.getElementById('fetch-posts').addEventListener('click', async () => {
       try {
+        console.log('Fetching posts...');
         const posts = await api.get('/posts');
-        document.getElementById('posts-data').textContent = JSON.stringify(posts.slice(0, 3), null, 2);
+        console.log('Posts received:', posts);
+        document.getElementById('get-data').textContent = JSON.stringify(posts.slice(0, 3), null, 2);
       } catch (error) {
-        document.getElementById('posts-data').textContent = `Error: ${error.message || 'Unknown error'}`;
+        handleError('get-data', error);
+      }
+    });
+
+    document.getElementById('fetch-post').addEventListener('click', async () => {
+      try {
+        console.log('Fetching single post...');
+        const post = await api.get('/posts/1');
+        console.log('Post received:', post);
+        document.getElementById('get-data').textContent = JSON.stringify(post, null, 2);
+      } catch (error) {
+        handleError('get-data', error);
+      }
+    });
+
+    document.getElementById('fetch-comments').addEventListener('click', async () => {
+      try {
+        console.log('Fetching comments...');
+        const comments = await api.get('/posts/1/comments');
+        console.log('Comments received:', comments);
+        document.getElementById('get-data').textContent = JSON.stringify(comments.slice(0, 2), null, 2);
+      } catch (error) {
+        handleError('get-data', error);
       }
     });
 
     // POST example
     document.getElementById('create-post').addEventListener('click', async () => {
       try {
+        console.log('Creating post...');
         const newPost = {
           title: 'voca-http example',
           body: 'This is a test post created with voca-http',
@@ -108,9 +261,58 @@
         };
         
         const post = await api.post('/posts', newPost);
+        console.log('Post created:', post);
         document.getElementById('post-data').textContent = JSON.stringify(post, null, 2);
       } catch (error) {
-        document.getElementById('post-data').textContent = `Error: ${error.message || 'Unknown error'}`;
+        handleError('post-data', error);
+      }
+    });
+
+    // PUT example
+    document.getElementById('update-post-put').addEventListener('click', async () => {
+      try {
+        console.log('Updating post with PUT...');
+        const updatedPost = {
+          id: 1,
+          title: 'Updated with PUT',
+          body: 'This post has been completely replaced with PUT',
+          userId: 1
+        };
+        
+        const post = await api.put('/posts/1', updatedPost);
+        console.log('Post updated with PUT:', post);
+        document.getElementById('put-data').textContent = JSON.stringify(post, null, 2);
+      } catch (error) {
+        handleError('put-data', error);
+      }
+    });
+
+    // PATCH example
+    document.getElementById('update-post-patch').addEventListener('click', async () => {
+      try {
+        console.log('Updating post with PATCH...');
+        const partialUpdate = {
+          title: 'Updated with PATCH'
+        };
+        
+        const post = await api.patch('/posts/1', partialUpdate);
+        console.log('Post updated with PATCH:', post);
+        document.getElementById('patch-data').textContent = JSON.stringify(post, null, 2);
+      } catch (error) {
+        handleError('patch-data', error);
+      }
+    });
+
+    // DELETE example
+    document.getElementById('delete-post').addEventListener('click', async () => {
+      try {
+        console.log('Deleting post...');
+        const result = await api.delete('/posts/1');
+        console.log('Post deleted:', result);
+        document.getElementById('delete-data').textContent = 'Post successfully deleted. Server response: ' + 
+          JSON.stringify(result, null, 2);
+      } catch (error) {
+        handleError('delete-data', error);
       }
     });
 
@@ -121,15 +323,17 @@
       const resultElement = document.getElementById('upload-result');
       
       if (fileInput.files.length === 0) {
-        resultElement.textContent = 'Please select a file first';
+        resultElement.innerHTML = '<div class="error">Please select a file first</div>';
         return;
       }
       
       const file = fileInput.files[0];
       
       try {
+        console.log('Uploading file:', file.name);
         // Track upload progress
         const updateProgress = (percent) => {
+          console.log(`Upload progress: ${percent.toFixed(1)}%`);
           progressBar.style.width = `${percent}%`;
         };
         
@@ -141,9 +345,65 @@
           updateProgress
         );
         
+        console.log('Upload complete:', result);
         resultElement.textContent = JSON.stringify(result, null, 2);
       } catch (error) {
-        resultElement.textContent = `Upload Error: ${error.message || 'Unknown error'}`;
+        console.error('Upload error:', error);
+        resultElement.innerHTML = `<div class="error">Upload Error: ${error.message || 'Unknown error'}</div>`;
+      }
+    });
+
+    // File download example with progress tracking
+    document.getElementById('download-file').addEventListener('click', async () => {
+      const urlInput = document.getElementById('download-url');
+      const progressBar = document.getElementById('download-progress');
+      const resultElement = document.getElementById('download-result');
+      
+      if (!urlInput.value) {
+        resultElement.innerHTML = '<div class="error">Please enter a URL to download</div>';
+        return;
+      }
+      
+      try {
+        console.log('Downloading from:', urlInput.value);
+        progressBar.style.width = '0%';
+        
+        // Track download progress
+        const updateProgress = (percent) => {
+          console.log(`Download progress: ${percent.toFixed(1)}%`);
+          progressBar.style.width = `${percent}%`;
+        };
+        
+        // Download the file
+        const data = await voca.downloadFile(
+          urlInput.value,
+          {}, // headers
+          updateProgress
+        );
+        
+        console.log('Download complete, data length:', data.length);
+        
+        // For images, create an image element
+        if (urlInput.value.match(/\.(jpeg|jpg|gif|png)$/) || urlInput.value.includes('picsum.photos')) {
+          // Create a blob from the data
+          const blob = new Blob([data], { type: 'image/jpeg' });
+          const imageUrl = URL.createObjectURL(blob);
+          
+          resultElement.innerHTML = `
+            <p>Download complete!</p>
+            <img src="${imageUrl}" alt="Downloaded image" style="max-width: 100%; margin-top: 10px;">
+          `;
+        } else {
+          // For other files, just show info
+          resultElement.innerHTML = `
+            <p>Download complete!</p>
+            <p>Data size: ${data.length} bytes</p>
+            <pre>${data.substring(0, 200)}${data.length > 200 ? '...' : ''}</pre>
+          `;
+        }
+      } catch (error) {
+        console.error('Download error:', error);
+        resultElement.innerHTML = `<div class="error">Download Error: ${error.message || 'Unknown error'}</div>`;
       }
     });
   </script>

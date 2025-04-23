@@ -34,13 +34,34 @@ typeof SuppressedError === "function" ? SuppressedError : function (error, suppr
  * Creates a base HTTP client with interceptors and configuration
  * @param fetch Native fetch function to use
  * @param config Configuration options
- * @returns Configured fetch function
+ * @returns Configured fetch function with HTTP methods
  */
 const vocaCreate = (fetch, { baseUrl = '', // Base URL to be added to the request URI
-onError = (reason) => Promise.reject(reason), onRequest = (options) => options, onRequestError = onError, onResponse = (response) => Promise.resolve(response), onResponseError = onError, interceptors = { request: [], response: [] }, retryCount = 3, // Default retry count
+onError = (reason) => Promise.reject(reason), onRequest = undefined, onRequestError = onError, onResponse = (response) => Promise.resolve(response), onResponseError = onError, interceptors = { request: [], response: [] }, retryCount = 3, // Default retry count
 timeout = 5000, // Default timeout in ms
  } = {}) => {
-    return (...args) => {
+    // Default request handler if none provided
+    const defaultRequestHandler = (method, url, data, headers) => {
+        let body;
+        const reqHeaders = Object.assign({ 'Content-Type': 'application/json' }, (headers || {}));
+        if (data instanceof FormData) {
+            body = data;
+            delete reqHeaders['Content-Type'];
+        }
+        else if (data !== undefined) {
+            body = JSON.stringify(data);
+        }
+        return {
+            url: url,
+            method: method,
+            body,
+            headers: reqHeaders
+        };
+    };
+    // Use provided onRequest or default
+    const requestHandler = onRequest || defaultRequestHandler;
+    // Create base request handler
+    const request = (...args) => {
         let retries = 0;
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), timeout); // Timeout handling
@@ -66,7 +87,10 @@ timeout = 5000, // Default timeout in ms
             }));
         };
         try {
-            let options = onRequest(...args);
+            // Extract arguments
+            const [method, url, data, headers] = args;
+            // Process request options
+            let options = requestHandler(method, url, data, headers);
             // Execute request interceptors
             interceptors.request.forEach((interceptor) => {
                 const interceptedOptions = interceptor(options);
@@ -74,128 +98,39 @@ timeout = 5000, // Default timeout in ms
                     options = interceptedOptions;
                 }
             });
-            // Add the base URL to the URI
-            options.url = `${baseUrl}${options.url}`;
+            // Add the base URL to the URI if it's not an absolute URL
+            const isAbsoluteUrl = options.url.startsWith('http://') || options.url.startsWith('https://');
+            if (!isAbsoluteUrl && baseUrl) {
+                options.url = `${baseUrl}${options.url}`;
+            }
             return fetchWithRetry(options).finally(() => clearTimeout(timeoutId)); // Cleanup timeout
         }
         catch (reason) {
             return onRequestError(reason);
         }
     };
+    // Create HTTP method handlers
+    const createRequestWithBody = (method) => (url, data, headers) => request(method, url, data, headers);
+    const createRequestWithoutBody = (method) => (url, headers) => request(method, url, undefined, headers);
+    // Return enhanced API object with all methods
+    const api = request;
+    api.get = createRequestWithoutBody('GET');
+    api.post = createRequestWithBody('POST');
+    api.put = createRequestWithBody('PUT');
+    api.patch = createRequestWithBody('PATCH');
+    api.delete = createRequestWithBody('DELETE');
+    // Add the upload file method
+    api.uploadFile = (url, file, headers = {}, onProgress) => {
+        // Check if URL is absolute (starts with http:// or https://)
+        const isAbsoluteUrl = url.startsWith('http://') || url.startsWith('https://');
+        const fullUrl = isAbsoluteUrl ? url : `${baseUrl}${url}`;
+        // Dynamic import to avoid circular dependencies
+        return Promise.resolve().then(function () { return fileHandling; }).then(module => {
+            return module.uploadFile(fullUrl, file, headers, onProgress);
+        });
+    };
+    return api;
 };
-
-/**
- * Base class for HTTP functionality
- */
-class HttpBase {
-    constructor() {
-        this.httpMethods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
-    }
-    /**
-     * Gets the global environment (browser or node)
-     */
-    getEnv() {
-        if (typeof window !== 'undefined') {
-            return window;
-        }
-        if (typeof global !== 'undefined') {
-            return global;
-        }
-        return globalThis;
-    }
-    /**
-     * Gets available HTTP methods
-     */
-    getHttpMethods() {
-        return this.httpMethods;
-    }
-}
-
-/**
- * Factory function to create an HTTP request
- * @param args Arguments for request (method, uri, data)
- * @param config Request configuration
- * @returns Promise with request result
- */
-function createHttpRequest(args, config) {
-    const instance = new HttpInstance(args, config);
-    return instance.execute();
-}
-/**
- * Class for handling HTTP requests with different methods
- */
-class HttpInstance {
-    /**
-     * Create an HTTP instance
-     * @param args Arguments for request (method, uri, data)
-     * @param config Request configuration
-     */
-    constructor(args, config) {
-        this.method = null;
-        this.base = new HttpBase();
-        this.uri = args[1];
-        this.data = args[2];
-        this.vocaInstance = this._vocaItem(config);
-        if (args.includes('GET')) {
-            this.method = 'GET';
-        }
-        else if (args.includes('POST')) {
-            this.method = 'POST';
-        }
-        else if (args.includes('PATCH')) {
-            this.method = 'PATCH';
-        }
-        else if (args.includes('PUT')) {
-            this.method = 'PUT';
-        }
-        else if (args.includes('DELETE')) {
-            this.method = 'DELETE';
-        }
-    }
-    /**
-     * Execute the HTTP request
-     * @returns Promise with request result
-     */
-    execute() {
-        if (!this.method) {
-            return Promise.reject(new Error('Invalid HTTP method'));
-        }
-        if (this.method === 'GET') {
-            return this.vocaInstance(this.method, this.uri);
-        }
-        return this.vocaInstance(this.method, this.uri, this.data);
-    }
-    /**
-     * Create a voca instance with configuration
-     * @param config Request configuration
-     * @returns Configured voca instance
-     */
-    _vocaItem(config) {
-        return vocaCreate(this.base.getEnv().fetch, Object.assign(Object.assign({}, config), { onRequest: (method, route, data = undefined, customHeaders = {}) => {
-                let body;
-                let headers = Object.assign({ 'Content-Type': 'application/json' }, customHeaders);
-                if (data instanceof FormData) {
-                    body = data; // If it's FormData, don't set Content-Type
-                    delete headers['Content-Type']; // Do not set Content-Type for FormData
-                }
-                else if (data) {
-                    body = JSON.stringify(data); // For non-FormData, send as JSON
-                }
-                return {
-                    url: `${route}`,
-                    body,
-                    method,
-                    headers,
-                };
-            }, onResponse: (response) => {
-                if (response.status === 403)
-                    throw new Error('Authorization error.');
-                return response.json();
-            }, onError: () => {
-                return Promise.reject();
-            } }));
-    }
-}
 
 /**
  * Default configuration for a request
@@ -271,20 +206,40 @@ const trackProgress = (progressEvent, onProgress) => {
 const uploadFile = (url, file, headers = {}, onProgress) => {
     const formData = new FormData();
     formData.append('file', file);
-    return fetch(url, {
-        method: 'POST',
-        body: formData,
-        headers,
-    })
-        .then((response) => {
-        if (!response.ok) {
-            throw new Error(`HTTP Error: ${response.status}`);
+    return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        // Add progress tracking if callback is provided
+        if (onProgress) {
+            xhr.upload.addEventListener('progress', (event) => {
+                if (event.lengthComputable) {
+                    const percent = (event.loaded / event.total) * 100;
+                    onProgress(percent);
+                }
+            });
         }
-        return response.json();
-    })
-        .catch((error) => {
-        console.error('Upload error:', error);
-        throw error;
+        xhr.open('POST', url);
+        // Add headers
+        Object.entries(headers).forEach(([key, value]) => {
+            xhr.setRequestHeader(key, value);
+        });
+        xhr.onload = () => {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                try {
+                    const response = JSON.parse(xhr.responseText);
+                    resolve(response);
+                }
+                catch (e) {
+                    resolve(xhr.responseText);
+                }
+            }
+            else {
+                reject(new Error(`HTTP Error: ${xhr.status}`));
+            }
+        };
+        xhr.onerror = () => {
+            reject(new Error('Network Error'));
+        };
+        xhr.send(formData);
     });
 };
 /**
@@ -342,16 +297,65 @@ const downloadFile = (url, headers = {}, onProgress) => {
     });
 };
 
+var fileHandling = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    downloadFile: downloadFile,
+    trackProgress: trackProgress,
+    uploadFile: uploadFile
+});
+
+/**
+ * Base class for HTTP functionality
+ */
+class HttpBase {
+    constructor() {
+        this.httpMethods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
+    }
+    /**
+     * Gets the global environment (browser or node)
+     */
+    getEnv() {
+        if (typeof window !== 'undefined') {
+            return window;
+        }
+        if (typeof global !== 'undefined') {
+            return global;
+        }
+        return globalThis;
+    }
+    /**
+     * Gets available HTTP methods
+     */
+    getHttpMethods() {
+        return this.httpMethods;
+    }
+}
+
 /**
  * Main library export with all HTTP methods and utilities
  */
 const voca = {
     create: vocaCreate,
-    get: (...args) => createHttpRequest(['GET', ...args], new VocaRequestConfig().getConfig()),
-    post: (...args) => createHttpRequest(['POST', ...args], new VocaRequestConfig().getConfig()),
-    patch: (...args) => createHttpRequest(['PATCH', ...args], new VocaRequestConfig().getConfig()),
-    put: (...args) => createHttpRequest(['PUT', ...args], new VocaRequestConfig().getConfig()),
-    delete: (...args) => createHttpRequest(['DELETE', ...args], new VocaRequestConfig().getConfig()),
+    get: (url, headers) => {
+        const config = new VocaRequestConfig().getConfig();
+        return vocaCreate(fetch, config)('GET', url, undefined, headers);
+    },
+    post: (url, data, headers) => {
+        const config = new VocaRequestConfig().getConfig();
+        return vocaCreate(fetch, config)('POST', url, data, headers);
+    },
+    patch: (url, data, headers) => {
+        const config = new VocaRequestConfig().getConfig();
+        return vocaCreate(fetch, config)('PATCH', url, data, headers);
+    },
+    put: (url, data, headers) => {
+        const config = new VocaRequestConfig().getConfig();
+        return vocaCreate(fetch, config)('PUT', url, data, headers);
+    },
+    delete: (url, data, headers) => {
+        const config = new VocaRequestConfig().getConfig();
+        return vocaCreate(fetch, config)('DELETE', url, data, headers);
+    },
     config: new VocaRequestConfig(),
     trackProgress,
     uploadFile,

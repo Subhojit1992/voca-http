@@ -1,5 +1,4 @@
 import { vocaCreate } from './core/vocaCreate';
-import { createHttpRequest } from './core/httpInstance';
 import { VocaRequestConfig } from './core/requestConfig';
 import { trackProgress, uploadFile, downloadFile } from './core/fileHandling';
 import { VocaHttp } from './types';
@@ -10,20 +9,30 @@ import { VocaHttp } from './types';
 export const voca: VocaHttp = {
   create: vocaCreate,
   
-  get: (...args: any[]) => 
-    createHttpRequest(['GET', ...args], new VocaRequestConfig().getConfig()),
+  get: (url: string, headers?: HeadersInit) => {
+    const config = new VocaRequestConfig().getConfig();
+    return vocaCreate(fetch, config)('GET', url, undefined, headers);
+  },
     
-  post: (...args: any[]) => 
-    createHttpRequest(['POST', ...args], new VocaRequestConfig().getConfig()),
+  post: (url: string, data?: any, headers?: HeadersInit) => {
+    const config = new VocaRequestConfig().getConfig();
+    return vocaCreate(fetch, config)('POST', url, data, headers);
+  },
     
-  patch: (...args: any[]) => 
-    createHttpRequest(['PATCH', ...args], new VocaRequestConfig().getConfig()),
+  patch: (url: string, data?: any, headers?: HeadersInit) => {
+    const config = new VocaRequestConfig().getConfig();
+    return vocaCreate(fetch, config)('PATCH', url, data, headers);
+  },
     
-  put: (...args: any[]) => 
-    createHttpRequest(['PUT', ...args], new VocaRequestConfig().getConfig()),
+  put: (url: string, data?: any, headers?: HeadersInit) => {
+    const config = new VocaRequestConfig().getConfig();
+    return vocaCreate(fetch, config)('PUT', url, data, headers);
+  },
     
-  delete: (...args: any[]) => 
-    createHttpRequest(['DELETE', ...args], new VocaRequestConfig().getConfig()),
+  delete: (url: string, data?: any, headers?: HeadersInit) => {
+    const config = new VocaRequestConfig().getConfig();
+    return vocaCreate(fetch, config)('DELETE', url, data, headers);
+  },
     
   config: new VocaRequestConfig(),
   trackProgress,

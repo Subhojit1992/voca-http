@@ -15,6 +15,7 @@ export declare class HttpInstance {
     private vocaInstance;
     private method;
     private data;
+    private headers;
     /**
      * Create an HTTP instance
      * @param args Arguments for request (method, uri, data)

@@ -29,21 +29,45 @@ export const uploadFile = (
   const formData = new FormData();
   formData.append('file', file);
 
-  return fetch(url, {
-    method: 'POST',
-    body: formData,
-    headers,
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP Error: ${response.status}`);
-      }
-      return response.json();
-    })
-    .catch((error) => {
-      console.error('Upload error:', error);
-      throw error;
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    
+    // Add progress tracking if callback is provided
+    if (onProgress) {
+      xhr.upload.addEventListener('progress', (event) => {
+        if (event.lengthComputable) {
+          const percent = (event.loaded / event.total) * 100;
+          onProgress(percent);
+        }
+      });
+    }
+    
+    xhr.open('POST', url);
+    
+    // Add headers
+    Object.entries(headers).forEach(([key, value]) => {
+      xhr.setRequestHeader(key, value as string);
     });
+    
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        try {
+          const response = JSON.parse(xhr.responseText);
+          resolve(response);
+        } catch (e) {
+          resolve(xhr.responseText);
+        }
+      } else {
+        reject(new Error(`HTTP Error: ${xhr.status}`));
+      }
+    };
+    
+    xhr.onerror = () => {
+      reject(new Error('Network Error'));
+    };
+    
+    xhr.send(formData);
+  });
 };
 
 /**
