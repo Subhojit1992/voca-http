@@ -2,7 +2,7 @@
 
  <img src="https://raw.githubusercontent.com/Subhojit1992/voca-http/master/docs/public/images/voca-logo.png" alt="voca-http logo" width="130" height="130" />
 
-A lightweight and flexible HTTP client for browser and Node.js environments. Inspired by Axios, with support for interceptors, progress tracking, and TypeScript.
+A lightweight and flexible HTTP client for browser and Node.js environments. With support for interceptors, progress tracking, and TypeScript.
 
 [![npm version](https://img.shields.io/npm/v/voca-http.svg)](https://www.npmjs.com/package/voca-http)
 [![License](https://img.shields.io/npm/l/voca-http.svg)](LICENSE)

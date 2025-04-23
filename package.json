@@ -16,15 +16,29 @@
     "lint": "eslint 'src/**/*.ts'",
     "prepublishOnly": "npm run build"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Subhojit1992/voca-http.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Subhojit1992/voca-http/issues"
+  },
+  "homepage": "https://github.com/Subhojit1992/voca-http#readme",
   "keywords": [
     "http",
     "ajax",
     "request",
-    "axios",
+    "voca",
+    "voca-http",
+    "voca-ajax",
+    "voca-request",
+    "voca-fetch",
+    "voca-promise",
+    "vocahttp",
     "fetch",
     "promise"
   ],
-  "author": "",
+  "author": "Subhojit1992",
   "license": "MIT",
   "devDependencies": {
     "@rollup/plugin-commonjs": "^24.0.0",
