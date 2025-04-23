@@ -1,51 +1,46 @@
 {
   "name": "voca-http",
   "version": "0.1.0",
-  "description": "Very light HTTP client based on Fetch API",
+  "description": "A lightweight and flexible HTTP client for the browser and node.js",
+  "main": "dist/voca-http.cjs.js",
+  "module": "dist/voca-http.esm.js",
+  "browser": "dist/voca-http.umd.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "start": "npm run clean && npm run dev",
-    "dev": "parcel src/*.html",
-    "build": "parcel build src/*.html",
-    "clean": "rimraf dist",
-    "build:release": "npm run clean && rollup -c"
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "lint": "eslint 'src/**/*.ts'",
+    "test": "jest",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
-    "fetch",
-    "rest",
-    "xhr",
     "http",
-    "https",
-    "request",
-    "requests",
-    "fetching",
     "ajax",
-    "get",
-    "url",
-    "api"
+    "request",
+    "axios",
+    "fetch",
+    "promise"
   ],
+  "author": "",
   "license": "MIT",
-  "repository": "Subhojit1992/voca-http",
-  "author": {
-    "name": "Subhojit Mondal",
-    "email": "subhojit1992.mondal@gmail.com",
-    "url": "https://github.com/Subhojit1992"
-  },
   "devDependencies": {
-    "@babel/core": "^7.0.0-0",
-    "@babel/plugin-proposal-decorators": "^7.10.4",
-    "@babel/preset-env": "^7.10.4",
-    "@rollup/plugin-babel": "^5.0.4",
-    "@rollup/plugin-node-resolve": "^8.1.0",
-    "eslint": "7.2.0",
-    "eslint-config-airbnb": "18.2.0",
-    "eslint-plugin-import": "^2.21.2",
-    "eslint-plugin-jsx-a11y": "^6.3.0",
-    "eslint-plugin-react": "^7.20.0",
-    "eslint-plugin-react-hooks": "4.0.0",
-    "parcel-bundler": "^1.12.4",
-    "prettier": "^2.0.5",
-    "rollup": "^2.18.2",
-    "rollup-plugin-uglify": "^6.0.4",
-    "sass": "^1.26.8"
+    "@rollup/plugin-commonjs": "^24.0.0",
+    "@rollup/plugin-node-resolve": "^15.0.0",
+    "@rollup/plugin-terser": "^0.4.0",
+    "@rollup/plugin-typescript": "^11.0.0",
+    "@types/jest": "^29.5.0",
+    "@typescript-eslint/eslint-plugin": "^5.59.0",
+    "@typescript-eslint/parser": "^5.59.0",
+    "eslint": "^8.38.0",
+    "jest": "^29.5.0",
+    "rollup": "^3.20.0",
+    "rollup-plugin-dts": "^5.3.0",
+    "ts-jest": "^29.1.0",
+    "tslib": "^2.5.0",
+    "typescript": "^5.0.0"
   }
-}
+} 
