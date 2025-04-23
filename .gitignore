@@ -9,6 +9,9 @@ package-lock.json
 dist/
 build/
 lib/
+out/
+
+.next/
 
 # TypeScript
 *.tsbuildinfo

@@ -295,7 +295,7 @@ const ApiPage: React.FC = () => {
 
         <ApiMethodName>voca.uploadFile(url, file, headers, onProgress)</ApiMethodName>
         <MethodSignature>
-          uploadFile(url: string, file: File, headers?: HeadersInit, onProgress?: (percent: number) => void): Promise&lt;any&gt;
+          uploadFile(url: string, file: File, headers?: HeadersInit, onProgress?: (percent: number) =&gt; void): Promise&lt;any&gt;
         </MethodSignature>
         <Paragraph>
           Uploads a file to the specified URL with optional progress tracking.
@@ -326,7 +326,7 @@ const ApiPage: React.FC = () => {
             </tr>
             <tr>
               <Td><Code>onProgress</Code></Td>
-              <Td><Code>(percent: number) => void</Code></Td>
+              <Td><Code>(percent: number) =&gt; void</Code></Td>
               <Td>Optional callback function to track upload progress</Td>
             </tr>
           </tbody>
@@ -334,7 +334,7 @@ const ApiPage: React.FC = () => {
 
         <ApiMethodName>voca.downloadFile(url, headers, onProgress)</ApiMethodName>
         <MethodSignature>
-          downloadFile(url: string, headers?: HeadersInit, onProgress?: (percent: number) => void): Promise&lt;string&gt;
+          downloadFile(url: string, headers?: HeadersInit, onProgress?: (percent: number) =&gt; void): Promise&lt;string&gt;
         </MethodSignature>
         <Paragraph>
           Downloads a file from the specified URL with optional progress tracking.
@@ -360,7 +360,7 @@ const ApiPage: React.FC = () => {
             </tr>
             <tr>
               <Td><Code>onProgress</Code></Td>
-              <Td><Code>(percent: number) => void</Code></Td>
+              <Td><Code>(percent: number) =&gt; void</Code></Td>
               <Td>Optional callback function to track download progress</Td>
             </tr>
           </tbody>
@@ -368,7 +368,7 @@ const ApiPage: React.FC = () => {
 
         <ApiMethodName>voca.trackProgress(progressEvent, onProgress)</ApiMethodName>
         <MethodSignature>
-          trackProgress(progressEvent: ProgressEvent, onProgress: (percent: number) => void): void
+          trackProgress(progressEvent: ProgressEvent, onProgress: (percent: number) =&gt; void): void
         </MethodSignature>
         <Paragraph>
           Utility function to track progress from an upload or download event.
@@ -389,7 +389,7 @@ const ApiPage: React.FC = () => {
             </tr>
             <tr>
               <Td><Code>onProgress</Code></Td>
-              <Td><Code>(percent: number) => void</Code></Td>
+              <Td><Code>(percent: number) =&gt; void</Code></Td>
               <Td>Callback function to receive progress updates</Td>
             </tr>
           </tbody>

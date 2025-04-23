@@ -1,7 +1,10 @@
 {
+  "/api-reference": "pages/api-reference.html",
   "/_app": "pages/_app.js",
+  "/docs": "pages/docs.html",
+  "/examples": "pages/examples.html",
+  "/": "pages/index.html",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/": "pages/index.js",
-  "/docs": "pages/docs.js"
+  "/404": "pages/404.html"
 }
