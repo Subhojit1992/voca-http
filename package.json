@@ -14,7 +14,6 @@
     "build": "rollup -c",
     "dev": "rollup -c -w",
     "lint": "eslint 'src/**/*.ts'",
-    "test": "jest",
     "prepublishOnly": "npm run build"
   },
   "keywords": [
