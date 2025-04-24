@@ -29,8 +29,25 @@ function MyApp({ Component, pageProps }: AppProps) {
     <>
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <link rel="icon" type="image/png" href="/images/voca-logo.png" />
+        
         <title>voca-http - Modern HTTP client for web applications</title>
-        <meta name="description" content="A lightweight, flexible HTTP client for modern web applications" />
+        <meta name="title" content="voca-http - Modern HTTP client for web applications" />
+        <meta name="description" content="A lightweight, flexible HTTP client for modern web applications." />
+
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://vocahttp.netlify.app/" />
+        <meta property="og:title" content="voca-http - Modern HTTP client for web applications" />
+        <meta property="og:description" content="A lightweight, flexible HTTP client for modern web applications." />
+        <meta property="og:image" content="/images/voca-http-thumb.png" />
+
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content="https://vocahttp.netlify.app/" />
+        <meta property="twitter:title" content="voca-http - Modern HTTP client for web applications" />
+        <meta property="twitter:description" content="A lightweight, flexible HTTP client for modern web applications." />
+        <meta property="twitter:image" content="/image/voca-http-thumb.png" />
+
         <script async src={`https://www.googletagmanager.com/gtag/js?id=${TRACKING_ID}`}></script>
         <script
           dangerouslySetInnerHTML={{
